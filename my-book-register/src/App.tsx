@@ -4,23 +4,29 @@ import FilterableBookTable from './components/filterableBookTable';
 import { BookItemModel } from './models';
 import BookForm from './components/bookForm/bookForm';
 
+const BASE_URL = `https://www.googleapis.com/books/v1/volumes?q=isbn:`;
+
 function App() {
   const [isbn, setIsbn] = useState('');
   const [books, setBooks] = useState<BookItemModel[]>([]);
 
-  const handleClickButton = (): void => {
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.totalItems === 0) {
-          alert('登録されていない ISBN コードです。');
-          return;
-        }
-        onPostCompleted({
-          name: data.items[0].volumeInfo.title,
-          isOnLoan: false,
-        });
+  const handleClickButton = async () => {
+    try {
+      const fetchData = await fetch(`${BASE_URL}${isbn}`);
+      if (!fetchData.ok) throw new Error('取得に失敗しました。');
+
+      const dataToJson = await fetchData.json();
+      if (dataToJson.totalItems === 0) {
+        alert('登録されていない ISBN コードです。');
+        return;
+      }
+      onPostCompleted({
+        name: dataToJson.items[0].volumeInfo.title,
+        isOnLoan: false,
       });
+    } catch (error: unknown) {
+      console.error(`Error:${error}`);
+    }
   };
 
   const onPostCompleted = (postedItem: Omit<BookItemModel, 'id'>): void => {
