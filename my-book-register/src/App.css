@@ -1,6 +1,7 @@
 /* 第3問：参考サイトと同じになるようにデザイン調整 */
 .App {
   padding: 30px;
+  margin: 0 30px;
 }
 
 .button {
@@ -25,4 +26,8 @@
 
 .filterable-book-table {
   display: flex;
+  flex-direction: column;
+  min-width: fit-content;
+  text-align: center;
+  gap: 12px;
 }
