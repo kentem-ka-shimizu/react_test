@@ -6,11 +6,11 @@ import BookForm from './components/bookForm/bookForm';
 import { fetchBookfromApi } from './api/fetchData';
 
 function App() {
-  const [isbn, setIsbn] = useState('');
+  const [isbnCode, setIsbnCode] = useState('');
   const [books, setBooks] = useState<BookItemModel[]>([]);
 
-  const handleClickButton = async () => {
-    const data = await fetchBookfromApi(isbn);
+  const handleSubmit = async () => {
+    const data = await fetchBookfromApi(isbnCode);
     if (data.totalItems === 0) {
       alert('登録されていない ISBN コードです。');
       return;
@@ -35,9 +35,9 @@ function App() {
     <div className="App">
       {/* 第1問：コンポーネントに分割 ↓ ↓ ↓ ↓ ↓ */}
       <BookForm
-        isbn={isbn}
-        setIsbn={setIsbn}
-        handleClickButton={handleClickButton}
+        onSubmit={handleSubmit}
+        onValueChange={setIsbnCode}
+        isbnCode={isbnCode}
       />
       {/* 第1問：コンポーネントに分割 ↑ ↑ ↑ ↑ ↑ ↑ */}
       <hr />

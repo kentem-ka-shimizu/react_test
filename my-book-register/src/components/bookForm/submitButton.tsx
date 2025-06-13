@@ -1,10 +1,10 @@
-const SubmitButton = ({
-  handleClickButton,
-}: {
-  handleClickButton: () => void;
-}) => {
+type Props = {
+  onSubmit: () => void;
+};
+
+const SubmitButton = ({ onSubmit }: Props) => {
   return (
-    <button className="button" onClick={handleClickButton}>
+    <button className="button" onClick={onSubmit}>
       書籍登録
     </button>
   );

@@ -1,20 +1,21 @@
 import { ChangeEvent } from 'react';
 
-const CodeInput = ({
-  isbn,
-  setIsbn,
-}: {
-  isbn: string;
-  setIsbn: (e: string) => void;
-}) => {
+type Props = {
+  isbnCode: string;
+  onValueChange: (value: string) => void;
+};
+
+const CodeInput = ({ isbnCode, onValueChange }: Props) => {
   return (
     <div className="label-input">
       <label className="label">ISBNコード</label>
       <input
         className="input"
         placeholder="入力してください"
-        value={isbn}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setIsbn(e.target.value)}
+        value={isbnCode}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          onValueChange(e.target.value)
+        }
       ></input>
     </div>
   );
