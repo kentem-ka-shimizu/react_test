@@ -33,8 +33,6 @@ function App() {
     ]);
   };
 
-  console.log(books);
-
   return (
     <div className="App">
       {/* 第1問：コンポーネントに分割 ↓ ↓ ↓ ↓ ↓ */}
@@ -50,10 +48,13 @@ function App() {
         onClickDelete={(id) => {
           {
             /* 第2問：貸出 or 返却 or 削除の処理を追加 */
-            const newBooks = books.filter((book) => {
-              return book.id !== id;
-            });
-            setBooks(newBooks);
+            const result = window.confirm('削除してもよろしいですか。');
+            if (result) {
+              const newBooks = books.filter((book) => {
+                return book.id !== id;
+              });
+              setBooks(newBooks);
+            }
           }
         }}
         onClickLendingSwitch={(id) => {
