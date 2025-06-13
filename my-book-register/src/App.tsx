@@ -33,6 +33,8 @@ function App() {
     ]);
   };
 
+  console.log(books);
+
   return (
     <div className="App">
       {/* 第1問：コンポーネントに分割 ↓ ↓ ↓ ↓ ↓ */}
@@ -48,11 +50,29 @@ function App() {
         onClickDelete={(id) => {
           {
             /* 第2問：貸出 or 返却 or 削除の処理を追加 */
+            const newBooks = books.filter((book) => {
+              return book.id !== id;
+            });
+            setBooks(newBooks);
           }
         }}
         onClickLendingSwitch={(id) => {
           {
             /* 第2問：貸出 or 返却 or 削除の処理を追加 */
+            const newBooks: BookItemModel[] = books.map((book) => {
+              if (book.id === id) {
+                const newBook: BookItemModel = {
+                  ...book,
+                  isOnLoan: !book.isOnLoan,
+                };
+                console.log(newBook);
+                return newBook;
+              } else {
+                console.log(book);
+                return book;
+              }
+            });
+            setBooks(newBooks);
           }
         }}
       />
