@@ -1,13 +1,11 @@
+import Button from 'src/components/button/button';
+
 type Props = {
   onSubmit: () => void;
 };
 
 const SubmitButton = ({ onSubmit }: Props) => {
-  return (
-    <button className="button" onClick={onSubmit}>
-      書籍登録
-    </button>
-  );
+  return <Button onClick={onSubmit}>書籍登録</Button>;
 };
 
 export default SubmitButton;

@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import InputWithLabel from '../inputWithLabel/inputWithLabel';
 
 type Props = {
   isbnCode: string;
@@ -7,17 +8,14 @@ type Props = {
 
 const CodeInput = ({ isbnCode, onValueChange }: Props) => {
   return (
-    <div className="label-input">
-      <label className="label">ISBNコード</label>
-      <input
-        className="input"
-        placeholder="入力してください"
-        value={isbnCode}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          onValueChange(e.target.value)
-        }
-      ></input>
-    </div>
+    <InputWithLabel
+      labelText="ISBNコード"
+      placeholder="入力してください"
+      value={isbnCode}
+      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+        onValueChange(e.target.value)
+      }
+    />
   );
 };
 

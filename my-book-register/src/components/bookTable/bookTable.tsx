@@ -1,18 +1,14 @@
-import { BookItemModel } from '../models';
+import { BookItem } from 'src/models';
 import BookRow from './bookRow';
 
 interface Props {
   //書籍情報一覧のstate
-  bookItems: BookItemModel[];
-  onClickDelete: (id: string) => void;
-  onClickLendingSwitch: (id: string) => void;
+  bookItems: BookItem[];
+  onDelete: (id: string) => void;
+  onLendingSwitch: (id: string) => void;
 }
 
-const BookTable = ({
-  bookItems,
-  onClickDelete,
-  onClickLendingSwitch,
-}: Props) => {
+const BookTable = ({ bookItems, onDelete, onLendingSwitch }: Props) => {
   return (
     <table border={1}>
       <thead>
@@ -26,8 +22,8 @@ const BookTable = ({
         {bookItems.map((book) => (
           <BookRow
             bookItem={book}
-            onClickDelete={onClickDelete}
-            onClickLendingSwitch={onClickLendingSwitch}
+            onDelete={onDelete}
+            onLendingSwitch={onLendingSwitch}
             key={book.id}
           />
         ))}
