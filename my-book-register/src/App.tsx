@@ -1,82 +1,69 @@
 import { useState } from 'react';
-import './App.css';
-import FilterableBookTable from './components/filterableBookTable';
-import { BookItemModel } from './models';
-import BookForm from './components/bookForm/bookForm';
-import { fetchBookfromApi } from './api/fetchData';
+import BookForm from 'src/components/bookForm/bookForm';
+import FilterableBookTable from './components/bookTable/filterableBookTable';
+import { BookItem } from './models';
+import { fetchData } from './api/fetchData';
+import { css } from 'styled-system/css';
+import { v4 as uuidv4 } from 'uuid';
+import Button from './components/button/button';
 
 function App() {
   const [isbnCode, setIsbnCode] = useState('');
-  const [books, setBooks] = useState<BookItemModel[]>([]);
+  const [books, setBooks] = useState<BookItem[]>([]);
 
-  const handleSubmit = async () => {
-    const data = await fetchBookfromApi(isbnCode);
+  const SubmitBook = async (isbnCode: string) => {
+    const data = await fetchData(isbnCode);
     if (data.totalItems === 0) {
       alert('登録されていない ISBN コードです。');
       return;
     }
-    onPostCompleted({
-      name: data.items[0].volumeInfo.title,
-      isOnLoan: false,
-    });
-  };
-
-  const onPostCompleted = (postedItem: Omit<BookItemModel, 'id'>): void => {
     setBooks((prev) => [
       ...prev,
       {
-        id: Math.floor(Math.random() * 1e5).toString(),
-        ...postedItem,
+        id: uuidv4(),
+        ...{
+          name: data.items[0].volumeInfo.title,
+          isOnLoan: false,
+        },
       },
     ]);
   };
 
+  const deleteBook = async (id: string) =>
+    setBooks(books.filter((book) => book.id !== id));
+
+  const switchLending = async (id: string) => {
+    setBooks((prev) =>
+      prev.map((book) =>
+        book.id === id
+          ? {
+              ...book,
+              isOnLoan: !book.isOnLoan,
+            }
+          : book,
+      ),
+    );
+  };
+
   return (
-    <div className="App">
-      {/* 第1問：コンポーネントに分割 ↓ ↓ ↓ ↓ ↓ */}
+    <div className={appContainer}>
+      <Button>test</Button>
       <BookForm
-        onSubmit={handleSubmit}
-        onValueChange={setIsbnCode}
+        onSubmit={() => SubmitBook(isbnCode)}
+        onValueChange={(isbnCode: string) => setIsbnCode(isbnCode)}
         isbnCode={isbnCode}
       />
-      {/* 第1問：コンポーネントに分割 ↑ ↑ ↑ ↑ ↑ ↑ */}
-      <hr />
       <FilterableBookTable
         books={books}
-        onClickDelete={(id) => {
-          {
-            /* 第2問：貸出 or 返却 or 削除の処理を追加 */
-            const result = window.confirm('削除してもよろしいですか。');
-            if (result) {
-              const newBooks = books.filter((book) => {
-                return book.id !== id;
-              });
-              setBooks(newBooks);
-            }
-          }
-        }}
-        onClickLendingSwitch={(id) => {
-          {
-            /* 第2問：貸出 or 返却 or 削除の処理を追加 */
-            const newBooks: BookItemModel[] = books.map((book) => {
-              if (book.id === id) {
-                const newBook: BookItemModel = {
-                  ...book,
-                  isOnLoan: !book.isOnLoan,
-                };
-                console.log(newBook);
-                return newBook;
-              } else {
-                console.log(book);
-                return book;
-              }
-            });
-            setBooks(newBooks);
-          }
-        }}
+        onDelete={deleteBook}
+        onLendingSwitch={switchLending}
       />
     </div>
   );
 }
 
 export default App;
+
+const appContainer = css({
+  padding: '30px',
+});
